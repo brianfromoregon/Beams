@@ -1,10 +1,19 @@
 package com.lovingishard.beams;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.app.Activity;
+import android.os.IBinder;
 import android.view.Menu;
+import android.view.View;
 
-public class MainActivity extends Activity {
+/**
+ * http://commons.wikimedia.org/wiki/File:Candle.jpg
+ */
+public class MainActivity extends LocationRequestingActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -12,6 +21,10 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
     }
 
+    public void onBtnClicked(View v) {
+        Intent intent = new Intent(this, DetailsActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -19,5 +32,4 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-    
 }

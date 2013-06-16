@@ -9,9 +9,13 @@
     tools:context=".MainActivity"
     android:background="@drawable/candle">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Button"
+            android:id="@+id/button"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="62dp"
+            android:onClick="onBtnClicked"/>
 </RelativeLayout>
