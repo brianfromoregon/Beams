@@ -1,14 +1,13 @@
 package com.lovingishard.beams;
 
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.location.Location;
 import android.os.Bundle;
-import android.app.Activity;
-import android.os.IBinder;
-import android.view.Menu;
+import android.text.Editable;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
 /**
  * http://commons.wikimedia.org/wiki/File:Candle.jpg
@@ -18,18 +17,35 @@ public class MainActivity extends LocationRequestingActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(getClass().getName(), "onCreate");
         setContentView(R.layout.activity_main);
     }
 
-    public void onBtnClicked(View v) {
-        Intent intent = new Intent(this, DetailsActivity.class);
-        startActivity(intent);
-    }
+    public void onBtnClicked(View ignored) {
+        Log.d(getClass().getName(), "onBtnClicked");
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        if (gpsEnabled()) {
+            final EditText input = new EditText(this);
+            new AlertDialog.Builder(this)
+                    .setTitle("Love Report")
+                    .setMessage("We're noting your GPS location, feel free to include a message too.")
+                    .setView(input)
+                    .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            String value = input.getText().toString();
+                            Log.i(getClass().getName(), "Entered: " + value);
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                }
+            }).show();
+        } else {
+            new AlertDialog.Builder(this)
+                    .setTitle("GPS Not Enabled")
+                    .setMessage("This app needs GPS to work. Please enable and try again!")
+                    .show();
+        }
+
     }
 }

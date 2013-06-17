@@ -16,10 +16,11 @@ public class LocationService extends Service implements LocationListener {
     Location currentBest;
     boolean gpsEnabled;
 
-
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d(getClass().getName(), "onCreate (using last known GPS fix)");
+
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         currentBest = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     }
@@ -27,11 +28,12 @@ public class LocationService extends Service implements LocationListener {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         throw new AssertionError("Use only by binding");
-
     }
 
     @Override
     public IBinder onBind(Intent intent) {
+        Log.d(getClass().getName(), "onBind (subscribing to GPS updates)");
+
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         return new LocalBinder();
     }
@@ -39,6 +41,8 @@ public class LocationService extends Service implements LocationListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d(getClass().getName(), "onDestroy (removing GPS subscription)");
+
         locationManager.removeUpdates(this);
     }
 
@@ -46,7 +50,7 @@ public class LocationService extends Service implements LocationListener {
     public void onLocationChanged(Location location) {
         if (location != null && LocationUtil.isBetterLocation(location, currentBest)) {
             currentBest = location;
-            Log.i(MainActivity.class.getName(), "Updated location to " + currentBest.toString());
+            Log.d(MainActivity.class.getName(), "Updated location to " + currentBest.toString());
         }
     }
 
@@ -57,17 +61,17 @@ public class LocationService extends Service implements LocationListener {
     @Override
     public void onProviderEnabled(String s) {
         if (LocationManager.GPS_PROVIDER.equals(s)) {
+            Log.i(MainActivity.class.getName(), "GPS provider enabled");
             gpsEnabled = true;
         }
-        Log.i(MainActivity.class.getName(), "Provider enabled " + s);
     }
 
     @Override
     public void onProviderDisabled(String s) {
         if (LocationManager.GPS_PROVIDER.equals(s)) {
+            Log.i(MainActivity.class.getName(), "GPS provider disabled");
             gpsEnabled = false;
         }
-        Log.i(MainActivity.class.getName(), "Provider disabled " + s);
     }
 
     public class LocalBinder extends Binder {
