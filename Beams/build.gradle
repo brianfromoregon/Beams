@@ -8,8 +8,24 @@ buildscript {
 }
 apply plugin: 'android'
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     compile files('libs/android-support-v4.jar')
+//    compile group: 'com.google.oath-client', name: 'google-oauth-client-java6', version: '1.15.0-rc'
+
+    compile ('com.google.oauth-client:google-oauth-client:1.15.0-rc') {
+        exclude group: 'xpp3', module: 'xpp3'
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+        exclude group: 'junit', module: 'junit'
+        exclude group: 'com.google.android', module: 'android'
+    }
+    compile group: 'com.google.http-client', name: 'google-http-client-gson', version: '1.15.0-rc'
+    compile group: 'com.google.apis', name: 'google-api-services-fusiontables', version: 'v1-rev25-1.15.0-rc'
+
+
 }
 
 android {
